@@ -73,3 +73,17 @@ Route::get('/', function () {
     }
     return redirect()->route('login');
 });
+
+// Temporary route for Railway DB seeding and debugging
+Route::get('/force-migrate', function () {
+    try {
+        $exitCode = \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
+            '--seed' => true,
+            '--force' => true
+        ]);
+        $output = \Illuminate\Support\Facades\Artisan::output();
+        return "<pre>Exit Code: $exitCode\n\nOutput:\n$output</pre>";
+    } catch (\Exception $e) {
+        return "<pre>Error: " . $e->getMessage() . "</pre>";
+    }
+});
